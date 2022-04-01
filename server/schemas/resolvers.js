@@ -30,20 +30,20 @@ const resolvers = {
       return { token, user };
     },
   // get a single user by either their id or their username
-  async getSingleUser({ user = null, params }, res) {
-    const foundUser = await User.findOne({
-      $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
-    });
+  // async getSingleUser({ user = null, params }, res) {
+  //   const foundUser = await User.findOne({
+  //     $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
+  //   });
 
-    if (!foundUser) {
-      return res.status(400).json({ message: 'Cannot find a user with this id!' });
-    }
+  //   if (!foundUser) {
+  //     return res.status(400).json({ message: 'Cannot find a user with this id!' });
+  //   }
 
-    res.json(foundUser);
-  },
+  //   res.json(foundUser);
+  // },
 
    // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
-    async createUser({ body }, res) {
+    async addUser({ body }, res) {
       const user = await User.create(body);
   
       if (!user) {
@@ -70,7 +70,7 @@ const resolvers = {
     }
   },
   // remove a book from `savedBooks`
-  async deleteBook({ user, params }, res) {
+  async removeBook({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
       { $pull: { savedBooks: { bookId: params.bookId } } },

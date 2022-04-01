@@ -1,12 +1,21 @@
 import { gql } from '@apollo/client';
 
-
-export const GET_ME= gql`
-  query me($query: query!) {
-    user(userId: $userId) {
+export const GET_ME = gql`
+  # create a GraphQL query to be executed by Apollo Client
+  query Me {
+    me {
       _id
-      name
+      username
+      email
+      bookCount
+      savedBooks {
+        authors
+        description
+        title
+        bookId
+        image
+        link
+      }
     }
   }
 `;
-
