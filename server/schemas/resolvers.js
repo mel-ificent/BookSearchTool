@@ -1,6 +1,7 @@
 const { User } = require('../models');
 // import sign token function from auth
 const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
   Query: {
@@ -13,7 +14,7 @@ const resolvers = {
 
   },
   Mutation: {
-    loginUser: async (parent, { email, password }) => {
+    login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -30,10 +31,11 @@ const resolvers = {
       return { token, user };
     },
 
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
+    addUser: async (parent, {username,email,password}) => {
+      const user = await User.create({username,email,password});
       const token = signToken(user);
       return { token, user };
+
     },
 
  // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
