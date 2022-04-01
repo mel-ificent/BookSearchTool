@@ -29,28 +29,16 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-  // get a single user by either their id or their username
-  // async getSingleUser({ user = null, params }, res) {
-  //   const foundUser = await User.findOne({
-  //     $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
-  //   });
 
-  //   if (!foundUser) {
-  //     return res.status(400).json({ message: 'Cannot find a user with this id!' });
-  //   }
-
-  //   res.json(foundUser);
-  // },
-
-   // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
-    async addUser({ body }, res) {
+    addUser: async (parent, body) => {
       const user = await User.create(body);
+      const token = signToken(user);
   
       if (!user) {
         return res.status(400).json({ message: 'Something is wrong!' });
       }
-      const token = signToken(user);
-      res.json({ token, user });
+  
+      return { token, user };
     },
 
  // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)

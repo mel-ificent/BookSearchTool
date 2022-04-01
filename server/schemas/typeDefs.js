@@ -34,7 +34,6 @@ input ParameterInput{
 
   type Query {
       me: User
-     getSingleUser(_id: ID): User
    }
 
   type Mutation {
