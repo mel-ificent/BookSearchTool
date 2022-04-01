@@ -37,8 +37,8 @@ input ParameterInput{
    }
 
   type Mutation {
+    addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addUser(name: String!, email: String!, password: String!): Auth
     saveBook(input: ParameterInput): User
     removeBook(bookId: String!): User
   }
