@@ -30,44 +30,39 @@ const resolvers = {
       return { token, user };
     },
 
-    addUser: async (parent, body) => {
-      const user = await User.create(body);
+    addUser: async (parent, { username, email, password }) => {
+      const user = await User.create({ username, email, password });
       const token = signToken(user);
-  
-      if (!user) {
-        return res.status(400).json({ message: 'Something is wrong!' });
-      }
-  
       return { token, user };
     },
 
  // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
   // user comes from `req.user` created in the auth middleware function
-  async saveBook({ user, body }, res) {
-    console.log(user);
-    try {
+   saveBook: async (parent, {bookData}, context) => {
+    if(context.user){
       const updatedUser = await User.findOneAndUpdate(
         { _id: user._id },
         { $addToSet: { savedBooks: body } },
         { new: true, runValidators: true }
-      );
-      return res.json(updatedUser);
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json(err);
-    }
+      )
+      return updatedUser;
+    };
+
+    throw new AuthenticationError('You need to be logged in!');
   },
   // remove a book from `savedBooks`
-  async removeBook({ user, params }, res) {
+  removeBook: async (parent, {bookId}, context) => {
+    if(context.user){
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
       { $pull: { savedBooks: { bookId: params.bookId } } },
       { new: true }
     );
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Couldn't find user with this id!" });
-    }
-    return res.json(updatedUser);
+
+    return updatedUser;
+  };
+
+  throw new AuthenticationError('You need to be logged in!');
   },
   },
 };
