@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
+import { useMutation,   useQuery  } from '@apollo/client';
 
 
 import Auth from '../utils/auth';
@@ -9,6 +9,7 @@ import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
 
 import { SAVE_BOOK } from '../utils/mutations';
+import { GET_ME } from '../utils/queries';
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -20,6 +21,8 @@ const SearchBooks = () => {
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
   const [saveBook, { error}] = useMutation(SAVE_BOOK);
+  const { loading, data } = useQuery(GET_ME);
+  const user = data?.me || data?.user || {};
 
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
@@ -52,7 +55,7 @@ const SearchBooks = () => {
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
       }));
-
+      console.log(bookData);
       setSearchedBooks(bookData);
       setSearchInput('');
     } catch (err) {
@@ -64,7 +67,7 @@ const SearchBooks = () => {
   const handleSaveBook = async (bookId) => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
-
+console.log(bookToSave);
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -73,17 +76,19 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      await saveBook({variables: {book: bookToSave}})
+
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
     }
+
+
+
+    
   };
 
   return (
@@ -91,6 +96,7 @@ const SearchBooks = () => {
       <Jumbotron fluid className='text-light bg-dark'>
         <Container>
           <h1>Search for Books!</h1>
+          <h2>Viewing {`${user.username}'s`} profile.</h2>
           <Form onSubmit={handleFormSubmit}>
             <Form.Row>
               <Col xs={12} md={8}>
