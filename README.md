@@ -23,7 +23,17 @@ SO THAT I can keep a list of books to purchase
 
 
 ## Usage
+When a user first accesses the page, they will be able to either sign up or log in with their user credentials.
+![Initial page](images/search.png)
 
+After logging in a user can search for books and saved them to their profile.
+![Search results](images/searchresults.png)
+
+After saving a book, the user will see it noted as 'already saved'.
+![Already saved book](images/alreadysaved.png)
+
+A user can then navigate to their saved books pages where they can see the books they have saved and remove them if needed.
+![Saved Books page](images/savedbooks.png)
 
 
 ## License
