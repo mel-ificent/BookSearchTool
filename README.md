@@ -35,10 +35,6 @@ After saving a book, the user will see it noted as 'already saved'.
 A user can then navigate to their saved books pages where they can see the books they have saved and remove them if needed.
 ![Saved Books page](images/savedbooks.png)
 
-***DISCLAIMER*** 
-
-There may be a lag on the deployed Heroku page between the saved books showing in the 'saved books' page, which can be resolved by logging in and out again. This will be investigated.
-
 
 ## License
 This application is covered under the [License: MIT](https://opensource.org/licenses/MIT).
