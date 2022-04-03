@@ -96,7 +96,7 @@ console.log(bookToSave);
       <Jumbotron fluid className='text-light bg-dark'>
         <Container>
           <h1>Search for Books!</h1>
-          <h2>Viewing {`${user.username}'s`} profile.</h2>
+          {Auth.loggedIn() && (<h2>Viewing {`${user.username}'s`} profile.</h2>)}
           <Form onSubmit={handleFormSubmit}>
             <Form.Row>
               <Col xs={12} md={8}>
